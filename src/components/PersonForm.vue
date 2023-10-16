@@ -1,30 +1,35 @@
 <template>
-    <p>Personne ajout</p>
+    <p>Ajouter :</p>
     <form  @submit.prevent="onSubmit">
-        <input type="text" name="nom" v-model="formNom"/>
-        <input type="submit" />
+        <input type="text" name="nom" placeholder="nom" v-model="formNom"/>
+        <input type="submit" value="Ajouter"/>
     </form>
-
 </template>
 
 <script setup>
-import { ref , defineEmits} from 'vue'
+import { ref } from 'vue'
 import axios from 'axios'
-const emit = defineEmits(['personCreated'])
+import {usePersonStore} from '../store/person'
 
+const personStore = usePersonStore();
 const formNom = ref("");
 
 async function onSubmit() {
 
-    // TODO : try catch
-    const res = await axios.post("/person/", {
+    axios.post("/person/", {
         "nom": formNom.value
-    });
-    console.log(res);
-    if(res.status == 201) {
-        formNom.value = "";
-        emit('personCreated');
-    }
+    })
+    .then(res => {
+        console.log(res);
+        if(res.status == 201) {
+            formNom.value = "";
+            personStore.fetchPersons();
+        }
+    })
+    .catch(err => {
+        console.log(err);
+    })
+
 }
 
 </script>

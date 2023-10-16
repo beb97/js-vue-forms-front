@@ -1,12 +1,13 @@
 <template>
-    <p>Personnes</p>
+    <main>
+    <h2>Personnes</h2>
 
     <table v-if="persons" class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Nom</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <th>Modifier</th>
+                    <th>Supprimer</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,59 +17,60 @@
                     <td @click="handleDelete"><a>D</a></td>
                 </tr> -->
                 <template v-for="person in persons" :key="person.id">
-                    <PersonListLigne :person="person" 
-                    @personDeleted="fetchPerson"
-                    @personUpdated="fetchPerson"/>
+                    <PersonListLigne :person="person"/>
                 </template>
             </tbody>
         </table>
 
     <PersonForm @personCreated="fetchPerson"/>
+</main>
 </template>
 
 <script setup>
 import PersonForm from './PersonForm.vue'
 import PersonListLigne from './PersonListLigne.vue'
-import { ref, onMounted } from 'vue'
+import {usePersonStore} from '../store/person'
+import { onMounted, computed } from 'vue'
 
-const persons = ref(null)
+const personStore = usePersonStore();
 
-// function handleDelete(e) {
-//     console.log("delete", e)
-// }
+// const getPersons = computed(() => {
+//     return personStore.getPersons;
+// });
 
-function fetchPerson() {
-  try {
-    fetch('http://localhost:8081/person/', {
-        method: "GET"
-    }).then(res => {
-        return res.json();
-    }).then(data => {
-        console.log(data);
-        persons.value = data;
-    })
+const persons = computed(() => {
+  return personStore.persons;
+});
 
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-onMounted(() =>fetchPerson())
-
+onMounted(() => {personStore.fetchPersons()})
 </script>
 
 <style scoped>
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    flex-basis: 100%;
+    flex-grow: 1;
+}
+
 table {
   border-collapse: collapse;
   border: 1px solid;
+  text-align: center;
 }
 
-tbody tr:nth-child(odd) {
-    background-color: rgba(138, 138, 138, 0.965);
-    color: #fff;
+th {
+  padding: 10px;
+    background-color: rgba(138, 138, 138, 0.5);
+}
+
+tbody tr:nth-child(even) {
+    background-color: rgba(138, 138, 138, 0.2);
 }
 
 th:nth-child(1) {
-    width: 20px;
+    min-width: 150px;
 }
 </style>

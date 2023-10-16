@@ -5,7 +5,7 @@
         <td v-if="isEditMode">
             <form  @submit.prevent="handleUpdate">
             <input type="text" name="nom" v-model="inputNom"/>
-            <input type="submit" />
+            <input type="submit" value="Modifier" />
             </form>
         </td>
         <td @click="toogleEditMode"><a>🖊️</a></td>
@@ -16,14 +16,14 @@
 
 <script setup>
 
-import { ref, defineProps, defineEmits, onMounted } from 'vue';
+import { defineProps, ref, onMounted } from 'vue';
 import axios from 'axios';
+import {usePersonStore} from '../store/person'
 
-const emit = defineEmits(['personDeleted', 'personUpdated'])
+const personStore = usePersonStore();
+
 const props = defineProps(['person'])
-
 const inputNom = ref('')
-
 const isEditMode = ref(false);
 
 function toogleEditMode() {
@@ -35,7 +35,7 @@ async function handleDelete() {
     const res = await axios.delete(`/person/${props.person.id}`);    
     console.log(res);
     if(res.status == 200) {
-        emit('personDeleted');
+        personStore.fetchPersons();
     }
 }
 
@@ -46,7 +46,7 @@ async function handleUpdate() {
     });    
     console.log(res);
     if(res.status == 201) {
-        emit('personUpdated');
+        personStore.fetchPersons();
         toogleEditMode();
     }
 }
