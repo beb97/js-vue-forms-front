@@ -1,7 +1,7 @@
 <template>
 
     <tr>
-        <td v-if="!isEditMode">{{props.person.nom}}</td>
+        <td v-if="!isEditMode">{{props.structure.nom}}</td>
         <td v-if="isEditMode">
             <form  @submit.prevent="handleUpdate">
             <input type="text" name="nom" v-model="inputNom"/>
@@ -18,11 +18,11 @@
 
 import { defineProps, ref, onMounted } from 'vue';
 import axios from 'axios';
-import {usePersonStore} from '../store/person'
+import {useStructureStore} from '../../store/structure'
 
-const personStore = usePersonStore();
+const structureStore = useStructureStore();
 
-const props = defineProps(['person'])
+const props = defineProps(['structure'])
 const inputNom = ref('')
 const isEditMode = ref(false);
 
@@ -31,24 +31,24 @@ function toogleEditMode() {
 }
 
 function handleDelete() {
-    axios.delete(`/person/${props.person.id}`)
+    axios.delete(`/structure/${props.structure.id}`)
     .then( res => {
         console.log(res);
         if(res.status == 200) {
-            personStore.fetchPersons();
+            structureStore.fetchStructures();
         }
     })
     .catch(err => console.log(err));
 }
 
 async function handleUpdate() {
-    axios.put(`/person/${props.person.id}`, {
+    axios.put(`/structure/${props.structure.id}`, {
         nom: inputNom.value
     })
     .then( res => {
         console.log(res);
         if(res.status == 201) {
-            personStore.fetchPersons();
+            structureStore.fetchStructures();
             toogleEditMode();
         }
     })
@@ -56,7 +56,7 @@ async function handleUpdate() {
 }
 
 onMounted(() => {
-    inputNom.value = props.person.nom;
+    inputNom.value = props.structure.nom;
 })
 
 

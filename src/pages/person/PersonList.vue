@@ -1,13 +1,14 @@
 <template>
     <main>
-    <h2>Personnes</h2>
+    <h2>🧠 Acteurs</h2>
 
     <table v-if="persons" class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Nom</th>
-                    <th>Modifier</th>
-                    <th>Supprimer</th>
+                    <th>Structure</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +30,7 @@
 <script setup>
 import PersonForm from './PersonForm.vue'
 import PersonListLigne from './PersonListLigne.vue'
-import {usePersonStore} from '../store/person'
+import {usePersonStore} from '../../store/person'
 import { onMounted, computed } from 'vue'
 
 const personStore = usePersonStore();
@@ -50,6 +51,8 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    width: clamp(300px, 100vw, 800px);
 
     flex-basis: 100%;
     flex-grow: 1;

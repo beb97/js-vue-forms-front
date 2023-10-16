@@ -20,7 +20,7 @@
 
 import { defineProps, ref, onMounted } from 'vue';
 import axios from 'axios';
-import {useActionStore} from '../store/action'
+import {useActionStore} from '../../store/action'
 
 const actionStore = useActionStore();
 

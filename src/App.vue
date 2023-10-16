@@ -37,6 +37,7 @@ html, body {
   
   color: #2c3e50;
   background-color: #c2d2e1;
+
   
 
   height: 100%;

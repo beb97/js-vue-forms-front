@@ -1,6 +1,6 @@
 <template>
     <main>
-    <h2>Actions de formation</h2>
+    <h2>📒 Actions de formation</h2>
 
     <table v-if="actions" class="table table-striped table-bordered">
             <thead>
@@ -8,8 +8,8 @@
                     <th>Nom</th>
                     <th>Formateur</th>
                     <th>Commercial</th>
-                    <th>Modifier</th>
-                    <th>Supprimer</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +31,7 @@
 <script setup>
 import ActionForm from './ActionForm.vue'
 import ActionListLigne from './ActionListLigne.vue'
-import {useActionStore} from '../store/action'
+import {useActionStore} from '../../store/action'
 import { onMounted, computed } from 'vue'
 
 const actionStore = useActionStore();
@@ -52,6 +52,9 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    
+     width: clamp(300px, 100vw, 800px);
 
     flex-basis: 100%;
     flex-grow: 1;

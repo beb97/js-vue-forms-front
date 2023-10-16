@@ -1,5 +1,5 @@
 <template>
-    <p>Ajouter :</p>
+    <h2>Ajouter</h2>
     <form  @submit.prevent="onSubmit">
         <input type="text" name="nom" placeholder="nom" v-model="formNom"/>
         <input type="submit" value="Ajouter"/>
@@ -9,21 +9,21 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
-import {usePersonStore} from '../store/person'
+import {useStructureStore} from '../../store/structure'
 
-const personStore = usePersonStore();
+const structureStore = useStructureStore();
 const formNom = ref("");
 
 async function onSubmit() {
 
-    axios.post("/person/", {
+    axios.post("/structure/", {
         "nom": formNom.value
     })
     .then(res => {
         console.log(res);
         if(res.status == 201) {
             formNom.value = "";
-            personStore.fetchPersons();
+            structureStore.fetchStructures();
         }
     })
     .catch(err => {
