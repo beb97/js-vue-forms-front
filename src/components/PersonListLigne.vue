@@ -30,25 +30,29 @@ function toogleEditMode() {
     isEditMode.value = !isEditMode.value;
 }
 
-// TODO : try catch
-async function handleDelete() {
-    const res = await axios.delete(`/person/${props.person.id}`);    
-    console.log(res);
-    if(res.status == 200) {
-        personStore.fetchPersons();
-    }
+function handleDelete() {
+    axios.delete(`/person/${props.person.id}`)
+    .then( res => {
+        console.log(res);
+        if(res.status == 200) {
+            personStore.fetchPersons();
+        }
+    })
+    .catch(err => console.log(err));
 }
 
-// TODO : try catch
 async function handleUpdate() {
-    const res = await axios.put(`/person/${props.person.id}`, {
+    axios.put(`/person/${props.person.id}`, {
         nom: inputNom.value
-    });    
-    console.log(res);
-    if(res.status == 201) {
-        personStore.fetchPersons();
-        toogleEditMode();
-    }
+    })
+    .then( res => {
+        console.log(res);
+        if(res.status == 201) {
+            personStore.fetchPersons();
+            toogleEditMode();
+        }
+    })
+    .catch(err => console.log(err));    
 }
 
 onMounted(() => {

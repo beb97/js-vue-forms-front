@@ -22,7 +22,7 @@
             </tbody>
         </table>
 
-    <PersonForm @personCreated="fetchPerson"/>
+    <PersonForm/>
 </main>
 </template>
 
