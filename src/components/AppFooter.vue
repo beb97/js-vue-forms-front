@@ -1,14 +1,11 @@
 <template>
-    <footer>
-        by pb
-    </footer>
+  <footer>by pb</footer>
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
 <style scoped>
 footer {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 </style>

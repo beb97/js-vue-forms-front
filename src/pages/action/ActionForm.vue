@@ -8,13 +8,17 @@
                 <OptionSelect :options="structures" :size="1" @selectedOption="handleStructure"/>
                 <input type="text" name="nom" placeholder="nom" v-model="formNom" size="12" required/>
             </fieldset>
+            <!-- READ THIS FORM : https://serversideup.net/post-put-patch-requests-with-vuejs-and-axios/ -->
+            <!-- ALSO  : https://formkit.com/ -->
+            <!-- + https://daisyui.com/components/dropdown/ -->
+            <!-- + tailwind -->
             <fieldset>
                 <legend>👩🏻‍🏫 Formateur</legend>
                 
                 <OptionSelect :options="persons" :size="4" @selectedOption="handleFormateur"/>
             </fieldset>
             <fieldset>
-                <legend>📃 Centre de formation</legend>
+                <legend>🥇 Centre de formation</legend>
                 
                 <OptionSelect :options="persons" :size="4" @selectedOption="handleCommercial"/>
             </fieldset>
@@ -39,6 +43,7 @@ const structureStore = useStructureStore();
 const formNom = ref("");
 const formFormateur = ref(0);
 const formCommercial = ref(0);
+const formStructure = ref(0);
 
 const persons = computed(() => {
   return personStore.persons;
@@ -60,7 +65,8 @@ async function onSubmit(e) {
     axios.post("/action/", {
         "nom": formNom.value,
         "formateurId":formFormateur.value,
-        "commercialId":formCommercial.value
+        "commercialId":formCommercial.value,
+        "structureId":formStructure.value
     })
     .then(res => {
         console.log(res);
@@ -84,9 +90,8 @@ function handleCommercial(id) {
 }
 
 function handleStructure(id) {
-    console.log(id);
+    formStructure.value = id;
 }
-
 
 onMounted(() => {
     personStore.fetchPersons();
@@ -128,5 +133,6 @@ legend {
     border-radius: 0em;
     border-top-left-radius: 1em;
     border-bottom-right-radius: 1em;
+    background-color: rgba(138, 138, 138, 0.5);
 }
 </style>

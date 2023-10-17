@@ -1,31 +1,29 @@
 <template>
-
   <AppHeader />
-  <router-view/>
-  <AppFooter/>
-
+  <router-view />
+  <AppFooter />
 </template>
 
 <script>
-
-import AppHeader from './components/AppHeader.vue';
-import AppFooter from './components/AppFooter.vue';
+import AppHeader from "./components/AppHeader.vue";
+import AppFooter from "./components/AppFooter.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     AppHeader,
-    AppFooter
-  }
-}
+    AppFooter,
+  },
+};
 </script>
 
 <style>
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: #e6edf3;
+  background-color: var(--bg-secondary);
 }
 
 #app {
@@ -34,20 +32,14 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   max-width: 800px;
   margin: auto;
-  
-  color: #2c3e50;
-  background-color: #c2d2e1;
 
-  
+  color: var(--primary);
+  background-color: var(--bg-primary);
 
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-}
-
-img {
-  width: 100px;
 }
 </style>

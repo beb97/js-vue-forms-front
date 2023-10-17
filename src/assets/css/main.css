@@ -1,0 +1,42 @@
+:root {
+  /* TEXT */
+  --primary: rgba(44, 62, 80);
+  --secondary: rgba(44, 62, 80);
+  --focus: rgba(44, 62, 80);
+  /* BACKGROUND */
+  --bg-primary: rgba(194, 210, 225);
+  --bg-secondary: rgba(230, 237, 243);
+  /* TABLES */
+  --t-odd: rgba(138, 138, 138, 0.2);
+  --t-head: rgba(138, 138, 138, 0.5);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: clamp(300px, 100vw, 800px);
+
+  flex-basis: 100%;
+  flex-grow: 1;
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid;
+  text-align: center;
+}
+
+th {
+  padding: 10px;
+  background-color: var(--t-head);
+}
+
+tbody tr:nth-child(even) {
+  background-color: var(--t-odd);
+}
+
+th:nth-child(1) {
+  min-width: 150px;
+}

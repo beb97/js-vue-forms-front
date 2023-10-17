@@ -1,6 +1,7 @@
 <template>
 
     <tr>
+        <td>{{props.action.structure.nom}}</td>
         <td v-if="!isEditMode">{{props.action.nom}}</td>
         <td v-if="isEditMode">
             <form  @submit.prevent="handleUpdate">
