@@ -2,6 +2,11 @@
   <main>
     <h2>📒 Actions de formation</h2>
 
+    <ActionForm 
+    :action="currentAction" 
+    @cancelEdit="deactivateEditMode"
+    />
+
     <table v-if="actions" class="table table-striped table-bordered">
       <thead>
         <tr>
@@ -14,39 +19,57 @@
         </tr>
       </thead>
       <tbody>
-        <!-- <tr v-for="action in actions" :key="action.id">
-                    <td>{{action.nom}}</td>
-                    <td><a>E</a></td>
-                    <td @click="handleDelete"><a>D</a></td>
-                </tr> -->
         <template v-for="action in actions" :key="action.id">
-          <ActionListLigne :action="action" />
+          <tr>
+            <td>{{ action.structure.nom }}</td>
+            <td>{{ action.nom }}</td>
+            <td>{{ action.formateur.nom }}</td>
+            <td>{{ action.commercial.nom }}</td>
+            <td @click="activateEditMode(action)"><a>🖊️</a></td>
+            <td @click="handleDelete(action.id)"><a>🗑️</a></td>
+          </tr>
         </template>
       </tbody>
     </table>
-
-    <ActionForm />
   </main>
 </template>
 
 <script setup>
+import { remove } from "@/api/action.api";
 import ActionForm from "./ActionForm.vue";
-import ActionListLigne from "./ActionListLigne.vue";
-import { useActionStore } from "../../store/action";
-import { onMounted, computed } from "vue";
+import { useActionStore } from "@/store/action";
+import { onMounted, computed, ref } from "vue";
 
 const actionStore = useActionStore();
 
-// const getActions = computed(() => {
-//     return actionStore.getActions;
-// });
+const currentAction = ref(null);
+
+function deactivateEditMode() {
+  currentAction.value = null;
+}
+
+function activateEditMode(action) {
+  currentAction.value = action;
+}
+
+function handleDelete(id) {
+  console.log(id);
+  remove(id)
+    .then((res) => {
+      console.log(res);
+      if (res.status == 200) {
+        actionStore.refreshActions();
+      }
+    })
+    .catch((err) => console.log(err));
+}
 
 const actions = computed(() => {
   return actionStore.actions;
 });
 
 onMounted(() => {
-  actionStore.fetchActions();
+  actionStore.initActions();
 });
 </script>
 

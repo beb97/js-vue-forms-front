@@ -2,7 +2,7 @@
   /* TEXT */
   --primary: rgba(44, 62, 80);
   --secondary: rgba(44, 62, 80);
-  --focus: rgba(44, 62, 80);
+  --focus: rgba(6, 51, 96, 0.907);
   /* BACKGROUND */
   --bg-primary: rgba(194, 210, 225);
   --bg-secondary: rgba(230, 237, 243);
@@ -15,6 +15,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  row-gap: 0.5em;
 
   width: clamp(300px, 100vw, 800px);
 
@@ -33,10 +34,40 @@ th {
   background-color: var(--t-head);
 }
 
+h1, h2, h3 {
+  margin: 0.5em;
+}
+
 tbody tr:nth-child(even) {
   background-color: var(--t-odd);
 }
 
 th:nth-child(1) {
   min-width: 150px;
+}
+
+td {
+  padding: 10px;
+}
+
+.icon:hover {
+  animation: shake 0.15s infinite;
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(0eg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }

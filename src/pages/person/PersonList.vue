@@ -2,6 +2,11 @@
   <main>
     <h2>🧠 Acteurs</h2>
 
+    <PersonForm 
+    :person="currentPerson" 
+    @cancelEdit="deactivateEditMode"
+    />
+
     <table v-if="persons" class="table table-striped table-bordered">
       <thead>
         <tr>
@@ -18,33 +23,60 @@
                     <td @click="handleDelete"><a>D</a></td>
                 </tr> -->
         <template v-for="person in persons" :key="person.id">
-          <PersonListLigne :person="person" />
+          <tr>
+            <td>{{ person.nom }}</td>
+            <td>{{ person.structure?.nom }}</td>
+            <td @click="activateEditMode(person)"><a>🖊️</a></td>
+            <td @click="handleDelete(person.id)"><a>🗑️</a></td>
+          </tr>
         </template>
       </tbody>
     </table>
 
-    <PersonForm />
   </main>
+
+  {{ getPersonsByRole("pierre") }}
+  <!-- TODO : HEHEH -->
 </template>
 
 <script setup>
 import PersonForm from "./PersonForm.vue";
-import PersonListLigne from "./PersonListLigne.vue";
-import { usePersonStore } from "../../store/person";
-import { onMounted, computed } from "vue";
+import { usePersonStore } from "@/store/person";
+import { onMounted, computed, ref } from "vue";
+import { remove } from "@/api/person.api";
 
 const personStore = usePersonStore();
 
-// const getPersons = computed(() => {
-//     return personStore.getPersons;
-// });
+// eslint-disable-next-line
+const {getPersonsByRole} = personStore;
+
+const currentPerson = ref(null);
+
+function deactivateEditMode() {
+  currentPerson.value = null;
+}
+
+function activateEditMode(person) {
+  currentPerson.value = person;
+}
+
+function handleDelete(id) {
+  remove(id)
+    .then((res) => {
+      console.log(res);
+      if (res.status == 200) {
+        personStore.refreshPersons();
+      }
+    })
+    .catch((err) => console.log(err));
+}
 
 const persons = computed(() => {
   return personStore.persons;
 });
 
 onMounted(() => {
-  personStore.fetchPersons();
+  personStore.initPersons();
 });
 </script>
 

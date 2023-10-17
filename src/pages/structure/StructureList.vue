@@ -2,6 +2,11 @@
   <main>
     <h2>🏭 Structures</h2>
 
+    <StructureForm 
+    :structure="currentStructure" 
+    @cancelEdit="deactivateEditMode"
+    />
+
     <table v-if="structures" class="table table-striped table-bordered">
       <thead>
         <tr>
@@ -11,39 +16,53 @@
         </tr>
       </thead>
       <tbody>
-        <!-- <tr v-for="structure in structures" :key="structure.id">
-                    <td>{{structure.nom}}</td>
-                    <td><a>E</a></td>
-                    <td @click="handleDelete"><a>D</a></td>
-                </tr> -->
-        <template v-for="structure in structures" :key="structure.id">
-          <StructureListLigne :structure="structure" />
-        </template>
+        <tr v-for="structure in structures" :key="structure.id">
+          <td >{{ structure.nom }}</td>
+          <td class="icon" @click="activateEditMode(structure)">🖊️</td>
+          <td class="icon" @click="handleDelete(structure.id)">🗑️</td>
+        </tr>
       </tbody>
     </table>
 
-    <StructureForm />
   </main>
 </template>
 
 <script setup>
+import { useStructureStore } from "@/store/structure";
+import { computed, onMounted, ref } from "vue";
 import StructureForm from "./StructureForm.vue";
-import StructureListLigne from "./StructureListLigne.vue";
-import { useStructureStore } from "../../store/structure";
-import { onMounted, computed } from "vue";
+import { remove } from "@/api/structure.api";
 
 const structureStore = useStructureStore();
 
-// const getStructures = computed(() => {
-//     return structureStore.getStructures;
-// });
+const currentStructure = ref(null);
+
+function deactivateEditMode() {
+  currentStructure.value = null;
+}
+
+function activateEditMode(struc) {
+  currentStructure.value = struc;
+}
+
+function handleDelete(id) {
+  console.log(id);
+  remove(id)
+    .then((res) => {
+      console.log(res);
+      if (res.status == 200) {
+        structureStore.refreshStructures();
+      }
+    })
+    .catch((err) => console.log(err));
+}
 
 const structures = computed(() => {
   return structureStore.structures;
 });
 
 onMounted(() => {
-  structureStore.fetchStructures();
+  structureStore.initStructures();
 });
 </script>
 

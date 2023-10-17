@@ -1,7 +1,6 @@
 <template>
   <header>
     <div id="my-forms">
-      <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
       <h1>👨‍🎓 My Forms</h1>
     </div>
     <nav>
@@ -19,7 +18,7 @@
 header {
   display: flex;
   flex-direction: column;
-  row-gap: 1em;
+  row-gap: 0.5em;
   width: 100%;
   justify-content: space-around;
   align-items: center;
