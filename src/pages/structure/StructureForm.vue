@@ -10,12 +10,14 @@
     <input type="text" name="nom" placeholder="nom" v-model="form.nom" />
     <input type="submit" :value="structure ? 'Mofifier' : 'Ajouter'" />
   </form>
+  {{ new Structure() }}
 </template>
 
 <script setup>
 import { post, put } from "@/api/structure.api";
 import { useStructureStore } from "@/store/structure";
 import { onMounted, ref, watch } from "vue";
+import Structure from "@/model/Structure.ts";
 
 const emit = defineEmits(["cancelEdit"]);
 

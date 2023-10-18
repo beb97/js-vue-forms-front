@@ -31,6 +31,8 @@
 
 # 18/10 :
 - ajout DTO : every model :
+- ajout des types : entreprise ?????
+- ajout des filtres sur type ?????
 
 # TODO :
 
@@ -40,6 +42,7 @@
 - ajout des filtres sur type
 - ajout pagination
 - model : creneau / devis / accord / facture
+- calendrier ICS
 - generation PDF
 - envoi mail
 - compte USER
