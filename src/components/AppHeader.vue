@@ -22,6 +22,7 @@ header {
   width: 100%;
   justify-content: space-around;
   align-items: center;
+  margin-bottom: 2em;
 }
 
 #my-forms {

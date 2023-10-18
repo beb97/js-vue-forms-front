@@ -1,7 +1,8 @@
-import { getAll } from "@/api/action.api";
-import { useGeneralStore } from "@/store/general";
+import { getAll } from "@/api/actionApi";
+import Action, { ActionDTO } from "@/model/Action";
+import { useGeneralStore } from "@/store/generaStorel";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 
 // PARAM 1 : nom du store
 // PARAM 2 : objet representant le store
@@ -9,28 +10,26 @@ export const useActionStore = defineStore("actions", () => {
   const generalStore = useGeneralStore();
   const { shouldFetch, setDirtyContext } = generalStore;
 
-  const actions = ref([]);
-  const lastRefresh = ref(null);
+  const actions: Ref<Action[]> = ref([]);
+  const lastRefresh: Ref<number> = ref(0);
 
   function getActions() {
     return actions;
   }
 
   function getActionsByRole() {
-    // TODO : doesnt work for now
-    // https://github.com/vuejs/pinia/discussions/1194
-    return () => actions.value.filter((action) => action.nom == "pierre");
+    return (role: String) => actions.value.filter((action) => action?.nom == role);
   }
 
   function initActions() {
     if (shouldFetch(lastRefresh.value)) {
-      this.fetchActions();
+      fetchActions();
     }
   }
 
   function refreshActions() {
     setDirtyContext();
-    this.fetchActions();
+    fetchActions();
   }
 
   async function fetchActions() {

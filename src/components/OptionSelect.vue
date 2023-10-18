@@ -1,6 +1,6 @@
 <template>
   <select v-model="selected" @input="handleSelected" :size="props.size">
-    <option disabled value="">Select one</option>
+    <!-- <option disabled value="">Select one</option> -->
     <option v-for="option in props.options" :value="option.id" :key="option.id">
       {{ option.nom }}
     </option>

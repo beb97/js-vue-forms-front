@@ -1,48 +1,68 @@
 <template>
   <h3 @click="$emit('cancelEdit')">
-    {{ props.action ? "Mofifier " + action?.nom + " ❌ " : "Ajouter action" }}
+    {{ props.action ? "🖊️" + action?.nom + " ❌ " : "Ajouter action" }}
   </h3>
   <form @submit.prevent="onSubmit">
     <div id="fields">
       <fieldset>
+        <legend>🥇 Centre de formation</legend>
+        <h3>Entreprise</h3>
+        <select><option>TODO</option></select>
+        <h3>Commercial</h3>
+        <select v-model="form.commercialId" :size="selectSize">
+          <!-- <option disabled value="">Select one</option> -->
+          <option
+            v-for="structure in commerciaux"
+            :value="structure.id"
+            :key="structure.id"
+          >
+            {{ structure.nom }}
+          </option>
+        </select>
+      </fieldset>
+
+      <fieldset>
         <legend>🏭 Client</legend>
-        <OptionSelect
-          :options="structures"
-          :default="form.structureId"
-          :size="1"
-          @selectedOption="handleStructure"
-        />
-        <input
-          type="text"
-          name="nom"
-          placeholder="nom"
-          v-model="form.nom"
-          size="12"
-          required
-        />
+        <h3>Entreprise</h3>
+        <select><option>TODO</option></select>
+        <h3>Contact</h3>
+        <select v-model="form.structureId" :size="selectSize">
+          <!-- <option disabled value="">Select one</option> -->
+          <option
+            v-for="structure in clients"
+            :value="structure.id"
+            :key="structure.id"
+          >
+            {{ structure.nom }}
+          </option>
+        </select>
       </fieldset>
 
       <fieldset>
         <legend>👩🏻‍🏫 Formateur</legend>
-
-        <OptionSelect
-          :options="persons"
-          :default="form.formateurId"
-          :size="4"
-          @selectedOption="handleFormateur"
-        />
-      </fieldset>
-      <fieldset>
-        <legend>🥇 Centre de formation</legend>
-
-        <OptionSelect
-          :options="persons"
-          :default="form.commercialId"
-          :size="4"
-          @selectedOption="handleCommercial"
-        />
+        <h3>Entreprise</h3>
+        <select><option>TODO</option></select>
+        <h3>Formateur</h3>
+        <select v-model="form.formateurId" :size="selectSize">
+          <!-- <option disabled value="">Select one</option> -->
+          <option
+            v-for="person in formateurs"
+            :value="person.id"
+            :key="person.id"
+          >
+            {{ person.nom }}
+          </option>
+        </select>
       </fieldset>
     </div>
+    <input
+      type="text"
+      name="nom"
+      placeholder="nom de la formation"
+      v-model="form.nom"
+      size="12"
+      required
+    />
 
     <input type="submit" :value="action ? 'Mofifier' : 'Ajouter'" />
   </form>
@@ -50,11 +70,12 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import { post, put } from "@/api/action.api";
-import { useActionStore } from "@/store/action";
-import { usePersonStore } from "@/store/person";
-import { useStructureStore } from "@/store/structure";
-import OptionSelect from "@/components/OptionSelect.vue";
+import { post, put } from "@/api/actionApi";
+import { useActionStore } from "@/store/actionStore";
+import { usePersonStore } from "@/store/personStore";
+import { useStructureStore } from "@/store/structureStore";
+import Action, { ActionDTO } from "@/model/Action";
+import { StructureType } from "@/model/Structure";
 
 const emit = defineEmits(["cancelEdit"]);
 
@@ -64,20 +85,30 @@ const structureStore = useStructureStore();
 
 const props = defineProps(["action"]);
 
-const form = ref({
-  nom: "",
-  formateurId: 0,
-  commercialId: 0,
-  structureId: 0,
+const form = ref(new ActionDTO());
+const selectSize=ref(5);
+
+const clients = computed(() => {
+  return structureStore.structures.filter(
+    (struc) => struc.type == StructureType.CLIENT.name
+  );
 });
 
-const persons = computed(() => {
-  return personStore.persons;
+const commerciaux = computed(() => {
+  return personStore.persons.filter(
+    (person) => person.structure.type == StructureType.ORGANISME.name
+  );
 });
 
-const structures = computed(() => {
-  return structureStore.structures;
+const formateurs = computed(() => {
+  return personStore.persons.filter(
+    (person) => person.structure.type == StructureType.INDEPENDANT.name
+  );
 });
+
+// const structures = computed(() => {
+//   return structureStore.structures;
+// });
 
 async function onSubmit() {
   if (props.action) {
@@ -135,30 +166,14 @@ watch(
 );
 
 function resetForm() {
-  form.value.nom = "";
-  form.value.formateurId = 0;
-  form.value.commercialId = 0;
-  form.value.structureId = 0;
+  form.value = new ActionDTO();
+  selectSize.value=5;
 }
 
 function initForm() {
   console.log("init form action", props.action);
-  form.value.nom = props.action.nom;
-  form.value.formateurId = props.action.formateur.id;
-  form.value.commercialId = props.action.commercial.id;
-  form.value.structureId = props.action.structure.id;
-}
-
-function handleFormateur(id) {
-  form.value.formateurId = id;
-}
-
-function handleCommercial(id) {
-  form.value.commercialId = id;
-}
-
-function handleStructure(id) {
-  form.value.structureId = id;
+  selectSize.value=1;
+  form.value = new Action(props.action);
 }
 
 onMounted(() => {

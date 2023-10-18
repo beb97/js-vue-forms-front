@@ -1,11 +1,8 @@
 <template>
   <main>
-    <h2>🧠 Acteurs</h2>
+    <h2>🧠 acteurs</h2>
 
-    <PersonForm 
-    :person="currentPerson" 
-    @cancelEdit="deactivateEditMode"
-    />
+    <PersonForm :person="currentPerson" @cancelEdit="deactivateEditMode" />
 
     <table v-if="persons" class="table table-striped table-bordered">
       <thead>
@@ -24,7 +21,13 @@
                 </tr> -->
         <template v-for="person in persons" :key="person.id">
           <tr>
-            <td>{{ person.nom }}</td>
+            <td>
+              <router-link
+                :to="{ name: 'personInfo', params: { id: person.id } }"
+              >
+                {{ person.nom }}
+              </router-link>
+            </td>
             <td>{{ person.structure?.nom }}</td>
             <td @click="activateEditMode(person)"><a>🖊️</a></td>
             <td @click="handleDelete(person.id)"><a>🗑️</a></td>
@@ -32,23 +35,19 @@
         </template>
       </tbody>
     </table>
-
   </main>
-
-  {{ getPersonsByRole("pierre") }}
-  <!-- TODO : HEHEH -->
 </template>
 
 <script setup>
 import PersonForm from "./PersonForm.vue";
-import { usePersonStore } from "@/store/person";
+import { usePersonStore } from "@/store/personStore";
 import { onMounted, computed, ref } from "vue";
-import { remove } from "@/api/person.api";
+import { remove } from "@/api/personApi";
 
 const personStore = usePersonStore();
 
 // eslint-disable-next-line
-const {getPersonsByRole} = personStore;
+const { getPersonsByRole } = personStore;
 
 const currentPerson = ref(null);
 

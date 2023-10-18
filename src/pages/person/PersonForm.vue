@@ -1,16 +1,20 @@
 <template>
   <h3 @click="$emit('cancelEdit')">
-    {{ person ? "Modifier " + person?.nom + " ❌ " : "Ajouter personne" }}
+    {{ person ? "🖊️" + person?.nom + " ❌ " : "Ajouter acteur" }}
   </h3>
   <form @submit.prevent="onSubmit">
     <input type="text" name="nom" placeholder="nom" v-model="form.nom" />
 
-    <OptionSelect
-      :options="structures"
-      :size="1"
-      :default="form.structureId"
-      @selectedOption="handleStructure"
-    />
+    <select v-model="form.structureId" size="5">
+      <!-- <option disabled value="">Select one</option> -->
+      <option
+        v-for="structure in structures"
+        :value="structure.id"
+        :key="structure.id"
+      >
+        {{ structure.nom }}
+      </option>
+    </select>
 
     <input type="submit" :value="person ? 'Mofifier' : 'Ajouter'" />
   </form>
@@ -18,18 +22,15 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import { post, put } from "@/api/person.api";
-import { usePersonStore } from "@/store/person";
-import { useStructureStore } from "@/store/structure";
-import OptionSelect from "@/components/OptionSelect.vue";
+import { post, put } from "@/api/personApi";
+import { usePersonStore } from "@/store/personStore";
+import { useStructureStore } from "@/store/structureStore";
+import Person, { PersonDTO } from "@/model/Person";
 
 const emit = defineEmits(["cancelEdit"]);
 const props = defineProps(["person"]);
 
-const form = ref({
-  nom: "",
-  structureId: 0,
-});
+const form = ref(new PersonDTO());
 
 const personStore = usePersonStore();
 const structureStore = useStructureStore();
@@ -51,7 +52,7 @@ async function handlePost() {
     .then((res) => {
       console.log(res);
       if (res.status == 201) {
-        console.log("person created : ",res.data)
+        console.log("person created : ", res.data);
         personStore.refreshPersons();
       }
     })
@@ -73,18 +74,13 @@ async function handleUpdate() {
 }
 
 function resetForm() {
-  form.value.nom = "";
-  form.value.structureId = "0";
+  form.value = new PersonDTO();
 }
 
 function initForm() {
   console.log("init form person", props.person);
-  form.value.nom = props.person.nom;
-  form.value.structureId = props.person.structure.id;
-}
-
-function handleStructure(id) {
-  form.value.structureId = id;
+  form.value = new Person(props.person);
+  console.log("form now equals: ", form.value)
 }
 
 watch(

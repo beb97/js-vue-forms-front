@@ -3,14 +3,14 @@ import { ref } from "vue";
 
 export const useGeneralStore = defineStore("general", () => {
   // LE CACHE DU PAUVRE
-  const dirtyContextDate = ref(false);
+  const dirtyContextDate = ref();
 
   function setDirtyContext() {
-    this.dirtyContextDate = Date.now();
+    dirtyContextDate.value = Date.now();
   }
 
-  function shouldFetch(lastFetch) {
-    if (lastFetch == null) {
+  function shouldFetch(lastFetch: number) {
+    if (lastFetch == 0) {
       return true;
     }
     if (dirtyContextDate.value && dirtyContextDate.value > lastFetch) {

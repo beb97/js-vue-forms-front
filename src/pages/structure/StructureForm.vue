@@ -2,31 +2,32 @@
   <form @submit.prevent="onSubmit">
     <h3 @click="$emit('cancelEdit')">
       {{
-        props.structure
-          ? "Mofifier " + structure?.nom + " ❌ "
-          : "Ajouter structure"
+        props.structure ? "🖊️" + structure?.nom + " ❌ " : "Ajouter structure"
       }}
     </h3>
     <input type="text" name="nom" placeholder="nom" v-model="form.nom" />
+    <select v-model="form.type" size="3">
+      <option v-for="type in StructureType.asArray()" :value="type" :key="type">
+        {{ type }}
+      </option>
+    </select>
     <input type="submit" :value="structure ? 'Mofifier' : 'Ajouter'" />
   </form>
-  {{ new Structure() }}
 </template>
 
-<script setup>
-import { post, put } from "@/api/structure.api";
-import { useStructureStore } from "@/store/structure";
+<script setup lang="ts">
+import { post, put } from "@/api/structureApi";
+import Structure, { StructureDTO, StructureType } from "@/model/Structure";
+// import Structure from "@/model/Structure";
+import { useStructureStore } from "@/store/structureStore";
 import { onMounted, ref, watch } from "vue";
-import Structure from "@/model/Structure.ts";
 
 const emit = defineEmits(["cancelEdit"]);
 
 const structureStore = useStructureStore();
-// const method = ref("post"); // METHOD BY DEFAULT
+
 const props = defineProps(["structure"]);
-const form = ref({
-  nom: "",
-});
+const form = ref(new StructureDTO());
 
 async function onSubmit() {
   if (props.structure) {
@@ -79,14 +80,13 @@ watch(
 );
 
 function resetForm() {
-  form.value.nom = "";
+  form.value = new StructureDTO();
 }
 
 function initForm() {
   console.log("init form struct", props.structure);
-  form.value.nom = props.structure.nom;
+  form.value = new Structure(props.structure);
 }
-
 
 onMounted(() => {});
 </script>

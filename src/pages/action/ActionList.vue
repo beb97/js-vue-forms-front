@@ -1,11 +1,8 @@
 <template>
   <main>
-    <h2>📒 Actions de formation</h2>
+    <h2>📒 actions</h2>
 
-    <ActionForm 
-    :action="currentAction" 
-    @cancelEdit="deactivateEditMode"
-    />
+    <ActionForm :action="currentAction" @cancelEdit="deactivateEditMode" />
 
     <table v-if="actions" class="table table-striped table-bordered">
       <thead>
@@ -22,7 +19,14 @@
         <template v-for="action in actions" :key="action.id">
           <tr>
             <td>{{ action.structure.nom }}</td>
-            <td>{{ action.nom }}</td>
+            <td>
+              <router-link
+                :to="{ name: 'actionInfo', params: { id: action.id } }"
+              >
+              {{ action.nom }}
+              </router-link>
+              
+            </td>
             <td>{{ action.formateur.nom }}</td>
             <td>{{ action.commercial.nom }}</td>
             <td @click="activateEditMode(action)"><a>🖊️</a></td>
@@ -35,9 +39,9 @@
 </template>
 
 <script setup>
-import { remove } from "@/api/action.api";
+import { remove } from "@/api/actionApi";
 import ActionForm from "./ActionForm.vue";
-import { useActionStore } from "@/store/action";
+import { useActionStore } from "@/store/actionStore";
 import { onMounted, computed, ref } from "vue";
 
 const actionStore = useActionStore();

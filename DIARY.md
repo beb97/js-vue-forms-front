@@ -30,14 +30,17 @@
 - ajout store general : mise en cache des listes
 
 # 18/10 :
-- ajout DTO : every model :
-- ajout des types : entreprise ?????
-- ajout des filtres sur type ?????
+- ajout TS : commande : vue add typescrit
+- ajout support SASS
+- ajout DTO : every model (trop bien)
+- ajout des types : entreprise
+- ajout des filtres sur type
+- ajout des pages infosindividuelles
 
 # TODO :
 
 - form validation ?
-- dto ?
+- ajout page detail : chaque model
 - ajout des types : entreprise
 - ajout des filtres sur type
 - ajout pagination
@@ -65,3 +68,6 @@
 - AXIOS with PINIA : https://blog.logrocket.com/consume-apis-vuex-pinia-axios/
 - PINIA STORE COMPOSITION : https://codybontecou.com/import-pinia-store-into-other-store.html
 - DTOs: https://medium.com/js-dojo/vue-js-typescript-best-practices-5-class-based-fetching-with-axios-using-dto-architecture-a2bf80102162
+- ADD TS to VUE : https://thabo-ambrose.medium.com/adding-typescript-to-an-existing-vue-cli-project-499e5125d04a
+- TS OBJECT DEFAULT VALUE : https://stackoverflow.com/questions/35074365/typescript-interface-default-values
+

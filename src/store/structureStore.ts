@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
-import { getAll } from "@/api/structure.api";
-import { ref } from "vue";
-import { useGeneralStore } from "@/store/general";
+import { getAll } from "@/api/structureApi";
+import { Ref, ref } from "vue";
+import { useGeneralStore } from "@/store/generaStorel";
+import Structure from "@/model/Structure";
 
 // PARAM 1 : nom du store
 // PARAM 2 : objet representant le store
@@ -9,15 +10,18 @@ export const useStructureStore = defineStore("structures", () => {
   const generalStore = useGeneralStore();
   const { shouldFetch, setDirtyContext } = generalStore;
 
-  const structures = ref([]);
-  const lastRefresh = ref(null);
+  const structures: Ref<Structure[]> = ref([]);
+  const lastRefresh: Ref<number> = ref(0);
 
   function getStructures() {
     return structures;
   }
-  function structuresByRole() {
-    return () =>
-      structures.value.filter((structure) => structure.nom == "pierre");
+
+  function structuresByType() {
+    return (type: String) => {
+      console.log("filtering struct by type: ", type);
+      return structures.value.filter((structure) => structure?.type == type);
+    };
   }
 
   async function fetchStructures() {
@@ -34,12 +38,12 @@ export const useStructureStore = defineStore("structures", () => {
 
   function refreshStructures() {
     setDirtyContext();
-    this.fetchStructures();
+    fetchStructures();
   }
 
   function initStructures() {
     if (shouldFetch(lastRefresh.value)) {
-      this.fetchStructures();
+      fetchStructures();
     }
   }
 
@@ -47,7 +51,7 @@ export const useStructureStore = defineStore("structures", () => {
     structures,
     lastRefresh,
     getStructures,
-    structuresByRole,
+    structuresByType,
     initStructures,
     refreshStructures,
     fetchStructures,
